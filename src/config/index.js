@@ -1,6 +1,16 @@
 const path = require('path');
 require('dotenv').config();
 
+// Validate required environment variables in production
+if (process.env.NODE_ENV === 'production') {
+  const required = ['JWT_SECRET'];
+  const missing = required.filter(key => !process.env[key] || process.env[key] === 'your-secret-key-change-this-in-production');
+  
+  if (missing.length > 0) {
+    throw new Error(`Missing required environment variables in production: ${missing.join(', ')}`);
+  }
+}
+
 module.exports = {
   server: {
     port: process.env.PORT || 3000,

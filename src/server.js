@@ -63,11 +63,14 @@ class Server {
     // Security
     this.app.use(helmet());
     
-    // CORS
-    this.app.use(cors({
-      origin: '*', // Configure appropriately for production
+    // CORS - Configure based on environment
+    const corsOptions = {
+      origin: config.server.env === 'production' 
+        ? process.env.ALLOWED_ORIGINS?.split(',') || false 
+        : '*',
       credentials: true,
-    }));
+    };
+    this.app.use(cors(corsOptions));
 
     // Compression
     this.app.use(compression());

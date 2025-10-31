@@ -121,9 +121,16 @@ class QueryController {
   async getQueryStats(req, res) {
     try {
       const { timeRange = '24h' } = req.query;
-      const interval = timeRange === '1h' ? '1 hour' :
-                      timeRange === '24h' ? '24 hours' :
-                      timeRange === '7d' ? '7 days' : '30 days';
+      
+      // Validate and map timeRange to prevent SQL injection
+      const validTimeRanges = {
+        '1h': 1,
+        '24h': 24,
+        '7d': 168,
+        '30d': 720
+      };
+      
+      const hours = validTimeRanges[timeRange] || 24;
 
       const result = await postgres.query(`
         SELECT 
@@ -135,10 +142,10 @@ class QueryController {
           SUM(CASE WHEN status = 'success' THEN 1 ELSE 0 END) as success_count,
           SUM(CASE WHEN status = 'error' THEN 1 ELSE 0 END) as error_count
         FROM query_logs
-        WHERE created_at > NOW() - INTERVAL '${interval}'
+        WHERE created_at > NOW() - INTERVAL '1 hour' * $1
         GROUP BY query_type
         ORDER BY count DESC
-      `);
+      `, [hours]);
 
       res.json({
         success: true,

@@ -3,6 +3,7 @@ const postgres = require('../../config/postgres');
 const sqlite = require('../../config/sqlite');
 const config = require('../../config');
 const { v4: uuidv4 } = require('uuid');
+const { validateTableName } = require('../../utils/security');
 
 class AIRepairService {
   constructor() {
@@ -105,6 +106,8 @@ class AIRepairService {
     const issues = [];
 
     try {
+      // Validate table name to prevent SQL injection
+      validateTableName(tableName);
       if (dbType === 'postgres') {
         // Check for null values in NOT NULL columns
         const result = await postgres.query(`

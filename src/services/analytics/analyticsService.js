@@ -260,10 +260,10 @@ class AnalyticsService {
   async flushEventBuffer() {
     if (this.eventBuffer.length === 0) return;
 
-    try {
-      const events = [...this.eventBuffer];
-      this.eventBuffer = [];
+    const events = [...this.eventBuffer];
+    this.eventBuffer = [];
 
+    try {
       for (const event of events) {
         await postgres.query(`
           INSERT INTO analytics_events (id, event_type, event_data, created_at)
@@ -287,9 +287,15 @@ class AnalyticsService {
   // Get analytics summary
   async getAnalyticsSummary(timeRange = '24h') {
     try {
-      const interval = timeRange === '1h' ? '1 hour' :
-                      timeRange === '24h' ? '24 hours' :
-                      timeRange === '7d' ? '7 days' : '30 days';
+      // Validate and map timeRange to prevent SQL injection
+      const validTimeRanges = {
+        '1h': '1 hour',
+        '24h': '24 hours',
+        '7d': '7 days',
+        '30d': '30 days'
+      };
+      
+      const interval = validTimeRanges[timeRange] || '24 hours';
 
       const result = await postgres.query(`
         SELECT 
@@ -299,8 +305,8 @@ class AnalyticsService {
           SUM(CASE WHEN status = 'success' THEN 1 ELSE 0 END) as successful_queries,
           SUM(CASE WHEN status = 'error' THEN 1 ELSE 0 END) as failed_queries
         FROM query_logs
-        WHERE created_at > NOW() - INTERVAL '${interval}'
-      `);
+        WHERE created_at > NOW() - INTERVAL '1 hour' * $1
+      `, [interval === '1 hour' ? 1 : interval === '24 hours' ? 24 : interval === '7 days' ? 168 : 720]);
 
       return result.rows[0];
     } catch (error) {

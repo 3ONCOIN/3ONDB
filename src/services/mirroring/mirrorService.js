@@ -3,6 +3,7 @@ const postgres = require('../../config/postgres');
 const sqlite = require('../../config/sqlite');
 const config = require('../../config');
 const { v4: uuidv4 } = require('uuid');
+const { validateTableName } = require('../../utils/security');
 
 class MirroringService {
   constructor() {
@@ -69,6 +70,9 @@ class MirroringService {
 
   async syncTable(tableName) {
     try {
+      // Validate table name to prevent SQL injection
+      validateTableName(tableName);
+      
       let syncedCount = 0;
 
       // Get the latest timestamp from SQLite for this table

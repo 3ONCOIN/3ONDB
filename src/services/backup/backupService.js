@@ -5,6 +5,7 @@ const logger = require('../../utils/logger');
 const postgres = require('../../config/postgres');
 const config = require('../../config');
 const { v4: uuidv4 } = require('uuid');
+const { validateTableName } = require('../../utils/security');
 
 class BackupService {
   constructor() {
@@ -164,6 +165,8 @@ class BackupService {
 
       for (const table of tables) {
         try {
+          // Validate table name to prevent SQL injection
+          validateTableName(table);
           const result = await postgres.query(`SELECT * FROM ${table}`);
           backupData.tables[table] = result.rows;
         } catch (error) {

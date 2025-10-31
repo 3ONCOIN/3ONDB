@@ -33,10 +33,17 @@ class StorageTierManager {
 
   async updateMetrics() {
     try {
+      // Validate database name (only alphanumeric, underscore, hyphen allowed)
+      const dbName = config.postgres.database;
+      if (!/^[a-zA-Z0-9_-]+$/.test(dbName)) {
+        throw new Error('Invalid database name format');
+      }
+
       // Get database size from PostgreSQL
+      // Note: Database names cannot be parameterized, so we validate and quote the identifier
       const sizeResult = await postgres.query(`
-        SELECT pg_database_size($1) as size
-      `, [config.postgres.database]);
+        SELECT pg_database_size('${dbName}') as size
+      `);
 
       this.metrics.usedSize = parseInt(sizeResult.rows[0]?.size || 0);
 
