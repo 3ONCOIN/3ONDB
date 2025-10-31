@@ -15,6 +15,9 @@ import {
   ThreeONChainConnector, 
   ThreeONPayConnector 
 } from './integrations/IntegrationHub';
+import { EcosystemDiscoveryService, EcosystemDiscovery } from './ecosystem/EcosystemDiscoveryService';
+import { ConnectorFactory } from './ecosystem/ConnectorFactory';
+import { SystemRegistration, ThreeONUPIToken } from './ecosystem/schemas';
 
 /**
  * 3ONDB - Quantum Database Engine
@@ -23,7 +26,9 @@ import {
  * - Infinite storage tiers (HOT, WARM, COLD, ARCHIVE)
  * - AI-based auto-repair
  * - Real-time synchronization
- * - Universal data connectivity for 3ON ecosystem
+ * - Universal data connectivity for entire 3ON ecosystem
+ * - Ecosystem discovery and automatic system registration
+ * - 3ONUPI authentication for all 40+ 3ON systems
  */
 export class QuantumDB {
   private config: DatabaseConfig;
@@ -31,6 +36,7 @@ export class QuantumDB {
   private repairSystem: AutoRepairSystem;
   private syncManager: SyncManager;
   private integrationHub: IntegrationHub;
+  private ecosystemDiscovery: EcosystemDiscoveryService;
   private initialized: boolean = false;
 
   constructor(config: DatabaseConfig) {
@@ -52,11 +58,29 @@ export class QuantumDB {
       this.config.enableSync
     );
     this.integrationHub = new IntegrationHub();
+    this.ecosystemDiscovery = new EcosystemDiscoveryService();
 
-    // Register default 3ON app connectors
+    // Register legacy connectors for backward compatibility
     this.integrationHub.registerConnector(new ThreeONCoreConnector());
     this.integrationHub.registerConnector(new ThreeONChainConnector());
     this.integrationHub.registerConnector(new ThreeONPayConnector());
+
+    // Register all 3ON ecosystem connectors
+    this.registerAllEcosystemConnectors();
+  }
+
+  /**
+   * Register all 3ON ecosystem system connectors
+   */
+  private registerAllEcosystemConnectors(): void {
+    const connectors = ConnectorFactory.createAllConnectors();
+    
+    for (const connector of connectors) {
+      // Skip if already registered (backward compatibility)
+      if (!this.integrationHub.getConnectors().includes(connector.appName)) {
+        this.integrationHub.registerConnector(connector);
+      }
+    }
   }
 
   /**
@@ -66,6 +90,9 @@ export class QuantumDB {
     if (this.initialized) {
       return;
     }
+
+    // Start ecosystem discovery service
+    this.ecosystemDiscovery.start();
 
     // Start sync manager if enabled
     if (this.config.enableSync) {
@@ -88,6 +115,7 @@ export class QuantumDB {
    */
   async shutdown(): Promise<void> {
     this.syncManager.stop();
+    this.ecosystemDiscovery.stop();
     this.initialized = false;
   }
 
@@ -200,6 +228,69 @@ export class QuantumDB {
   }
 
   /**
+   * Discover entire 3ON ecosystem
+   */
+  async discoverEcosystem(): Promise<EcosystemDiscovery> {
+    return await this.ecosystemDiscovery.discoverEcosystem();
+  }
+
+  /**
+   * Register a new 3ON system
+   */
+  async registerSystem(registration: SystemRegistration): Promise<void> {
+    const registered = await this.ecosystemDiscovery.registerSystem(registration);
+    
+    // Create and register connector
+    const connector = ConnectorFactory.createConnector(registered.systemName);
+    this.integrationHub.registerConnector(connector);
+  }
+
+  /**
+   * Authenticate with 3ONUPI
+   */
+  async authenticate3ONUPI(
+    userId: string,
+    systemId: string,
+    permissions: string[],
+    divineId?: string
+  ): Promise<ThreeONUPIToken> {
+    return await this.ecosystemDiscovery.authenticate3ONUPI(
+      userId,
+      systemId,
+      permissions,
+      divineId
+    );
+  }
+
+  /**
+   * Verify 3ONUPI token
+   */
+  verifyToken(token: string): ThreeONUPIToken | null {
+    return this.ecosystemDiscovery.verifyToken(token);
+  }
+
+  /**
+   * Send heartbeat for a system
+   */
+  systemHeartbeat(systemName: string): boolean {
+    return this.ecosystemDiscovery.heartbeat(systemName);
+  }
+
+  /**
+   * Get all registered 3ON systems
+   */
+  getRegisteredSystems() {
+    return this.ecosystemDiscovery.getRegisteredSystems();
+  }
+
+  /**
+   * Get ecosystem statistics
+   */
+  getEcosystemStats() {
+    return this.ecosystemDiscovery.getStatistics();
+  }
+
+  /**
    * Get database statistics
    */
   getStats() {
@@ -210,7 +301,8 @@ export class QuantumDB {
       integrations: {
         connectors: this.integrationHub.getConnectors(),
         status: Object.fromEntries(this.integrationHub.getConnectionStatus())
-      }
+      },
+      ecosystem: this.ecosystemDiscovery.getStatistics()
     };
   }
 
