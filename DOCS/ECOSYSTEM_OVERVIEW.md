@@ -382,3 +382,263 @@ Systems with WebSocket support provide real-time updates and streaming capabilit
 - ✅ 2 Divine Admin IDs
 
 All systems are integrated with **3ONUPI authentication**, **automatic discovery**, **REST/WebSocket connectivity**, and **infinite storage tiers** with AI-based auto-repair and real-time synchronization.
+
+---
+
+## 3ONDB Admin Dashboard
+
+The **3ONDB Admin Dashboard** is a comprehensive web-based management interface built into **3ONPRIME** for monitoring and managing the entire 3ON ecosystem.
+
+### Features
+
+#### 🎯 System Monitoring
+- **Visual Grid**: All 40+ 3ON systems displayed by category
+- **Live Status**: Real-time heartbeat indicators
+- **Search & Filter**: Find systems quickly by name or category
+- **System Details**: Version, uptime, and connection status
+
+#### 📊 Real-Time Metrics
+- **Requests/Second**: Live traffic monitoring
+- **Error Rates**: Track system errors and failures
+- **Replication Lag**: SQLite/PostgreSQL sync latency
+- **Active Connections**: Current system connections
+- **Live Charts**: WebSocket-powered visualization
+
+#### 🔐 3ONUPI Management
+- **Active Sessions**: View all authenticated sessions
+- **Auth Logs**: Track login/logout events
+- **Token Management**: Revoke sessions
+- **Permission Audit**: Review access patterns
+
+#### 🔄 Sync Dashboard
+- **Status Monitoring**: SQLite ↔ PostgreSQL sync status
+- **History**: Complete sync history with timing
+- **Manual Trigger**: Force sync operations
+- **Conflict Resolution**: View and resolve sync conflicts
+
+#### 🛠️ AI Auto-Repair
+- **Repair Actions**: Track automated fixes
+- **Error Detection**: View detected issues
+- **Repair History**: Success/failure rates
+- **Predictive Alerts**: AI-based issue prediction
+
+### Access the Dashboard
+
+**URL**: `http://localhost:3001`
+
+**Authentication Tokens**:
+- **GODMODE**: `3ON-L3ON-0000-GODMODE` (unlimited access)
+- **ADMIN**: `3ON-GOD-0101-CORE-9999` (administrative access)
+- **Standard**: `3ONUPI-*` tokens (read-only)
+
+### Admin API Endpoints
+
+All endpoints require authentication via `Authorization: Bearer <token>` header.
+
+#### Systems Management
+
+```bash
+# List all systems
+GET /admin/systems
+
+# Get specific system
+GET /admin/systems/:systemName
+
+# Send heartbeat
+POST /admin/systems/:systemName/heartbeat
+
+# Get statistics
+GET /admin/systems/stats/summary
+```
+
+#### Metrics & Monitoring
+
+```bash
+# Real-time metrics
+GET /admin/metrics
+
+# Storage tier metrics
+GET /admin/metrics/storage
+
+# Sync metrics
+GET /admin/metrics/sync
+
+# Auto-repair metrics
+GET /admin/metrics/repair
+```
+
+#### Logs & Events
+
+```bash
+# Get logs
+GET /admin/logs?level=error&source=3ONCHAIN&limit=50
+
+# Get error logs
+GET /admin/logs/errors
+
+# Get repair logs
+GET /admin/logs/repair
+```
+
+#### 3ONUPI Authentication
+
+```bash
+# Get sessions
+GET /admin/upi/sessions?status=active
+
+# Get auth logs
+GET /admin/upi/auth-logs
+
+# Revoke session
+POST /admin/upi/revoke/:sessionId
+
+# Get statistics
+GET /admin/upi/stats
+```
+
+#### Database Sync
+
+```bash
+# Get sync status
+GET /admin/sync/status
+
+# Get sync history
+GET /admin/sync/history?limit=50
+
+# Trigger manual sync
+POST /admin/sync/trigger
+
+# Get conflicts
+GET /admin/sync/conflicts
+```
+
+### WebSocket Streaming
+
+Connect to `ws://localhost:3001` for real-time data:
+
+```javascript
+const ws = new WebSocket('ws://localhost:3001');
+
+ws.onopen = () => {
+  ws.send(JSON.stringify({ 
+    type: 'subscribe', 
+    channel: 'metrics' 
+  }));
+};
+
+ws.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  console.log('Live metrics:', data);
+};
+```
+
+**Streamed Data**:
+- Requests per second
+- Error counts
+- Replication lag
+- Active connections
+- System events
+
+### Quick Start
+
+1. **Start the dashboard**:
+   ```bash
+   cd apps/3ondb-admin
+   npm install
+   npm start
+   ```
+
+2. **Open browser**:
+   ```
+   http://localhost:3001
+   ```
+
+3. **View systems**: Browse all 40+ 3ON systems organized by category
+
+4. **Monitor metrics**: Watch live charts update in real-time
+
+5. **Check logs**: View recent activity and errors
+
+### Role-Based Access
+
+| Role | Token | Permissions | Access Level |
+|------|-------|-------------|--------------|
+| **GODMODE** | 3ON-L3ON-0000-GODMODE | All (*) | Unlimited access |
+| **ADMIN** | 3ON-GOD-0101-CORE-9999 | admin, manage, configure, monitor, audit | Administrative |
+| **STANDARD** | 3ONUPI-* | read | Read-only |
+
+### Dashboard Components
+
+**Status Cards**:
+- Total systems count
+- Requests/second
+- Replication lag
+- Error rate
+
+**System Grid**:
+- 40+ systems with live status
+- Category filtering
+- Search functionality
+- Quick access to details
+
+**Live Activity**:
+- Real-time metrics chart
+- WebSocket-powered updates
+- Historical trending
+- Error tracking
+
+**Recent Logs**:
+- System events
+- Error messages
+- Auto-repair actions
+- Filterable by level/source
+
+### Configuration
+
+Edit `apps/3ondb-admin/.env`:
+
+```env
+PORT=3001
+NODE_ENV=development
+CORS_ORIGIN=*
+LOG_LEVEL=info
+```
+
+### Integration Example
+
+```typescript
+// Query dashboard from code
+const response = await fetch('http://localhost:3001/admin/systems', {
+  headers: {
+    'Authorization': 'Bearer 3ON-L3ON-0000-GODMODE'
+  }
+});
+
+const data = await response.json();
+console.log(`Total systems: ${data.total}`);
+```
+
+### Documentation
+
+Full documentation available at: `apps/3ondb-admin/README.md`
+
+### Architecture
+
+```
+3ONDB Admin Dashboard
+├── Express Server (Port 3001)
+│   ├── Admin APIs (/admin/*)
+│   ├── WebSocket Server (ws://)
+│   └── Static File Serving
+├── Web Dashboard (HTML/JS/CSS)
+│   ├── System Grid
+│   ├── Live Charts
+│   ├── Status Cards
+│   └── Log Viewer
+└── Authentication Middleware
+    ├── GODMODE Access
+    ├── ADMIN Access
+    └── Standard User Access
+```
+
+The Admin Dashboard provides a centralized management interface for the entire 3ON ecosystem, accessible through 3ONPRIME with role-based security and real-time monitoring capabilities.

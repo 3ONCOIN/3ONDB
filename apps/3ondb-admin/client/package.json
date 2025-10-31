@@ -1,0 +1,9 @@
+{
+  "name": "3ondb-admin-client",
+  "version": "1.0.0",
+  "description": "3ONDB Admin Dashboard Client",
+  "scripts": {
+    "dev": "echo 'Client is static HTML, served by server'",
+    "build": "echo 'Client build complete'"
+  }
+}
