@@ -64,10 +64,34 @@ class Server {
     this.app.use(helmet());
     
     // CORS - Configure based on environment
+    const allowedOrigins = process.env.ALLOWED_ORIGINS 
+      ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
+      : [];
+    
     const corsOptions = {
-      origin: config.server.env === 'production' 
-        ? process.env.ALLOWED_ORIGINS?.split(',') || false 
-        : '*',
+      origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or curl)
+        if (!origin) return callback(null, true);
+        
+        // In development, allow any origin
+        if (config.server.env !== 'production') {
+          return callback(null, true);
+        }
+        
+        // In production, check whitelist
+        if (allowedOrigins.length === 0) {
+          // No origins configured - reject all CORS requests in production
+          logger.warn('No ALLOWED_ORIGINS configured for production', { origin });
+          return callback(new Error('Not allowed by CORS'));
+        }
+        
+        if (allowedOrigins.includes(origin)) {
+          return callback(null, true);
+        } else {
+          logger.warn('CORS request from unauthorized origin', { origin });
+          return callback(new Error('Not allowed by CORS'));
+        }
+      },
       credentials: true,
     };
     this.app.use(cors(corsOptions));

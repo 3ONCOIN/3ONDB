@@ -124,6 +124,16 @@ class SQLiteConnection {
     }
   }
 
+  /**
+   * Execute a SQL statement (INSERT, UPDATE, DELETE, etc.)
+   * WARNING: This method is intentionally designed to execute arbitrary SQL queries.
+   * It is the responsibility of the caller to ensure proper input validation.
+   * Always use parameterized queries (params array) for user input.
+   * 
+   * @param {string} sql - SQL statement
+   * @param {array} params - Parameterized values
+   * @returns {Promise<object>} Result with lastID and changes
+   */
   run(sql, params = []) {
     return new Promise((resolve, reject) => {
       this.db.run(sql, params, function(err) {
@@ -137,6 +147,16 @@ class SQLiteConnection {
     });
   }
 
+  /**
+   * Execute a SQL query and return a single row
+   * WARNING: This method is intentionally designed to execute arbitrary SQL queries.
+   * It is the responsibility of the caller to ensure proper input validation.
+   * Always use parameterized queries (params array) for user input.
+   * 
+   * @param {string} sql - SQL query
+   * @param {array} params - Parameterized values
+   * @returns {Promise<object>} Single row result
+   */
   get(sql, params = []) {
     return new Promise((resolve, reject) => {
       this.db.get(sql, params, (err, row) => {
@@ -150,6 +170,16 @@ class SQLiteConnection {
     });
   }
 
+  /**
+   * Execute a SQL query and return all rows
+   * WARNING: This method is intentionally designed to execute arbitrary SQL queries.
+   * It is the responsibility of the caller to ensure proper input validation.
+   * Always use parameterized queries (params array) for user input.
+   * 
+   * @param {string} sql - SQL query
+   * @param {array} params - Parameterized values
+   * @returns {Promise<array>} Array of row results
+   */
   all(sql, params = []) {
     return new Promise((resolve, reject) => {
       this.db.all(sql, params, (err, rows) => {

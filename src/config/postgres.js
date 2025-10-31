@@ -147,6 +147,16 @@ class PostgresConnection {
     }
   }
 
+  /**
+   * Execute a SQL query with parameterized values
+   * WARNING: This method is intentionally designed to execute arbitrary SQL queries.
+   * It is the responsibility of the caller to ensure proper input validation.
+   * Always use parameterized queries (params array) for user input.
+   * 
+   * @param {string} text - SQL query text
+   * @param {array} params - Parameterized values
+   * @returns {Promise<object>} Query result
+   */
   async query(text, params) {
     const start = Date.now();
     try {
