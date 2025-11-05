@@ -1,0 +1,60 @@
+name: Backup and upload
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "0 3 * * 0" # run weekly on Sunday 03:00 UTC
+
+jobs:
+  backup-upload:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: pguser
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: 3onprime
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U pguser -d 3onprime"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_USER: pguser
+      DB_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      DB_NAME: 3onprime
+      S3_BUCKET: ${{ secrets.S3_BUCKET }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait for Postgres
+        run: |
+          for i in {1..30}; do
+            pg_isready -h 127.0.0.1 -p 5432 -U pguser && break || sleep 1;
+          done
+
+      - name: Install pg client and awscli
+        run: |
+          sudo apt-get update && sudo apt-get install -y postgresql-client awscli
+
+      - name: Create DB backup
+        run: |
+          DB_HOST=127.0.0.1 DB_PORT=5432 DB_USER=pguser DB_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} DB_NAME=3onprime ./scripts/db_backup.sh
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Upload latest backup to S3
+        run: |
+          file=$(ls -t backups/*.sql.gz | head -n1)
+          echo "Uploading $file to s3://${S3_BUCKET}/"
+          aws s3 cp "$file" "s3://${S3_BUCKET}/"

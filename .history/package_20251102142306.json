@@ -1,0 +1,177 @@
+{
+  "name": "3ondb-prime-quantum",
+  "version": "2.0.0",
+  "description": "🚀 3ONDB v2 Prime Quantum Edition - Enterprise Database Management System",
+  "main": "apps/3oncloud/backend.js",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
+  "scripts": {
+    "start": "node apps/3oncloud/backend.js",
+    "dev": "nodemon apps/3oncloud/backend.js",
+    "cli": "node apps/3oncloud/cli/quantum-cli.js",
+    "init": "npm run cli -- init",
+    "status": "npm run cli -- status",
+    "backup": "npm run cli -- backup",
+    "analytics": "npm run cli -- analytics",
+    "test": "jest",
+  "list-prune": "node scripts/list_prune_candidates.js",
+    "test:watch": "jest --watch",
+    "build": "npm run build:frontend && npm run build:backend",
+    "build:frontend": "cd apps/3oncloud && npm run build",
+    "build:backend": "echo 'Backend build complete'",
+    "deploy": "npm run build && npm run deploy:production",
+    "deploy:production": "echo 'Deploying to production...'",
+    "load-test": "k6 run load-test-script.js"
+  ,
+    "start:pgbouncer": "cross-env PGHOST=localhost PGPORT=6432 DB_BACKEND=pg npm run start",
+    "start:pgbouncer:verify": "./scripts/start_pgbouncer_and_verify.sh",
+  "pgbouncer:gen-userlist": "bash scripts/generate_pgbouncer_userlist.sh",
+  "migrate": "node apps/3oncloud/cli/quantum-cli.js migrate",
+  "migrate:psql": "node apps/3oncloud/cli/quantum-cli.js migrate --psql",
+  "migrate:all": "npm run migrate:psql && node scripts/mapped_migration_all_tables.js",
+  "migrate:verbose": "node scripts/migrate_sqlite_to_postgres_verbose.js",
+  "backup:all": "bash scripts/backup_databases.sh",
+  "restore:all": "bash scripts/restore_postgres_from_dump.sh",
+  "report:generate": "node scripts/generate_migration_report.js",
+  "apply:types": "node scripts/apply_type_constraints.js",
+  "report:reconcile": "node scripts/reconciliation_report.js",
+  "migrations:generate-checksums": "node scripts/generate_checksums.js",
+  "migrations:check-local": "node scripts/run_migrations.js --check-local",
+  "migrations:check-db": "node scripts/run_migrations.js --check-only"
+  },
+  "keywords": [
+    "database",
+    "postgresql",
+    "enterprise",
+    "real-time",
+    "collaboration",
+    "quantum",
+    "3ondb",
+    "project-management",
+    "task-management",
+    "analytics"
+  ],
+  "author": "3ON Technologies",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/3on/3ondb-prime-quantum.git"
+  },
+  "dependencies": {
+    "archiver": "^7.0.1",
+    "axios": "^1.5.1",
+    "bcrypt": "^5.1.1",
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "compression": "^1.7.4",
+    "connect-mongo": "^5.1.0",
+    "cors": "^2.8.5",
+    "cross-spawn": "^7.0.4",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.6.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^8.1.0",
+    "express-session": "^1.18.2",
+    "fast-xml-parser": "^4.2.4",
+    "got": "^12.1.0",
+    "helmet": "^7.1.0",
+    "inquirer": "^8.2.6",
+    "joi": "^17.11.0",
+    "jsonwebtoken": "^9.0.2",
+    "k6": "^0.0.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "morgan": "^1.10.0",
+    "multer": "^2.0.0",
+    "node-cron": "^3.0.2",
+    "nodemailer": "^7.0.10",
+    "ora": "^5.4.1",
+    "parseuri": "^3.0.2",
+    "pg": "^8.16.3",
+    "pino": "^10.1.0",
+    "posthog-node": "^5.10.3",
+    "rate-limiter-flexible": "^2.3.0",
+    "redis": "^4.6.10",
+    "socket.io": "^4.8.1",
+    "socks": "^2.8.7",
+    "sqlite3": "^5.1.7",
+    "table": "^6.8.1",
+    "tmp": "^0.2.5",
+    "tough-cookie": "^4.1.4",
+    "uuid": "^9.0.1",
+    "winston": "^3.11.0",
+    "ws": "^8.14.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.7",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.52.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1",
+    "prettier": "^3.0.3",
+    "rimraf": "^5.0.5",
+    "supertest": "^6.3.3"
+  },
+  "eslintConfig": {
+    "env": {
+      "node": true,
+      "es2021": true,
+      "jest": true
+    },
+    "extends": [
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2021,
+      "sourceType": "module"
+    },
+    "rules": {
+      "no-console": "warn",
+      "no-unused-vars": "warn",
+      "prefer-const": "error",
+      "no-var": "error"
+    }
+  },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 4,
+    "trailingComma": "es5"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "apps/3oncloud"
+    ],
+    "ext": "js,json",
+    "ignore": [
+      "node_modules/",
+      "logs/",
+      "backups/",
+      "coverage/"
+    ],
+    "env": {
+      "NODE_ENV": "development"
+    }
+  },
+  "bin": {
+    "3ondb-quantum": "./apps/3oncloud/cli/quantum-cli.js"
+  },
+  "files": [
+    "apps/",
+    "db/",
+    "docs/",
+    "README.md",
+    "LICENSE"
+  ],
+  "optionalDependencies": {
+    "canvas": "^2.11.2",
+    "sharp": "^0.32.6"
+  },
+  "bugs": {
+    "url": "https://github.com/3on/3ondb-prime-quantum/issues"
+  },
+  "homepage": "https://github.com/3on/3ondb-prime-quantum#readme"
+}

@@ -1,0 +1,3 @@
+## Placeholder. Do NOT commit real credentials.
+## Use `scripts/generate_pgbouncer_userlist.sh` to generate this file locally.
+"pguser" "md5<REPLACE_WITH_GENERATED_HASH>"

@@ -1,0 +1,10 @@
+{
+  "generated_at": "2025-10-30T18:48:19.613Z",
+  "comparisons": {
+    "users": {
+      "sqlite_count": 1,
+      "pg_count": 1,
+      "equal": true
+    }
+  }
+}

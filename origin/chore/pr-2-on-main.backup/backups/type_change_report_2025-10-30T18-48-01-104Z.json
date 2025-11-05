@@ -1,0 +1,42 @@
+{
+  "applied": [
+    {
+      "col": "email",
+      "from": "text",
+      "to": "VARCHAR(100)"
+    },
+    {
+      "col": "name",
+      "from": "text",
+      "to": "VARCHAR(100)"
+    },
+    {
+      "col": "created_at",
+      "from": "timestamp without time zone",
+      "to": "TIMESTAMP"
+    },
+    {
+      "action": "add_unique_email"
+    }
+  ],
+  "skipped": [
+    {
+      "col": "password",
+      "reason": "type_match"
+    },
+    {
+      "col": "role",
+      "reason": "type_match"
+    },
+    {
+      "col": "is_active",
+      "reason": "type_match"
+    }
+  ],
+  "errors": [
+    {
+      "col": "id",
+      "err": "type \"serial\" does not exist"
+    }
+  ]
+}

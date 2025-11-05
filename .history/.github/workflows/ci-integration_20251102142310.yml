@@ -1,0 +1,87 @@
+name: CI / Integration
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  migration-checksums:
+    name: Migration checksums
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+      - name: Install dependencies
+        run: npm ci
+      - name: Regenerate migration checksum manifest
+        run: node scripts/generate_checksums.js
+      - name: Check if manifest changed
+        run: |
+          if ! git --no-pager diff --exit-code -- migrations/checksums.json; then
+            echo "migrations/checksums.json is out of date. Run 'npm run migrations:generate-checksums' and commit the updated file.";
+            git --no-pager diff -- migrations/checksums.json || true;
+            exit 1;
+          fi
+
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+      - name: Install dependencies
+        run: npm ci
+      - name: Run tests
+        run: npm test --silent
+
+  integration:
+    name: Integration (Postgres + migrations)
+    needs: test
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      PGHOST: localhost
+      PGUSER: postgres
+      PGPASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      PGDATABASE: postgres
+      PGPORT: 5432
+      # FILE_ENCRYPTION_KEY should be set in repository secrets for secure integration runs
+      FILE_ENCRYPTION_KEY: ${{ secrets.FILE_ENCRYPTION_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+      - name: Install dependencies
+        run: npm ci
+      - name: Wait for Postgres
+        run: |
+          for i in {1..20}; do
+            pg_isready -h $PGHOST -p $PGPORT -U $PGUSER && break || sleep 1;
+          done
+      - name: Run migrations check (DB)
+        run: npm run migrations:check-db
+      - name: Run tests
+        run: npm test --silent

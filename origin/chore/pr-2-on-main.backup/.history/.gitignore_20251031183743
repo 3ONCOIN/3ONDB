@@ -1,0 +1,11 @@
+# Ignore generated PgBouncer credentials
+/db/pgbouncer/userlist.txt
+/db/pgbouncer/*.secret
+
+# Ignore local backups and runtime artifacts
+/backups/
+/data/pg/
+
+# Ignore locally generated secret files for monitoring
+/secrets/
+node_modules

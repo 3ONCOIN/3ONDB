@@ -1,0 +1,5 @@
+table,sqlite_count,pg_count
+users,1,1
+buckets,0,5
+files,5,5
+share_tokens,0,0

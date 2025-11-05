@@ -1,0 +1,34 @@
+# Node
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# Local env files
+.env
+.env.*
+
+# Editor & system
+.DS_Store
+.vscode/
+.history/
+
+# Backups and runtime
+backups/
+storage/
+uploads/
+data/
+
+# Generated test artifacts
+coverage/
+reports/
+# Ignore generated PgBouncer credentials
+/db/pgbouncer/userlist.txt
+/db/pgbouncer/*.secret
+
+# Ignore local backups and runtime artifacts
+/backups/
+/data/pg/
+
+# Ignore locally generated secret files for monitoring
+/secrets/
+node_modules

@@ -1,0 +1,332 @@
+{
+  "generated_at": "2025-10-30T18:17:26.988Z",
+  "database": "3onprime",
+  "tables": {
+    "activity_streams": {
+      "count": 0,
+      "sample": []
+    },
+    "analytics_snapshots": {
+      "count": 0,
+      "sample": []
+    },
+    "api_keys": {
+      "count": 0,
+      "sample": []
+    },
+    "audit_logs": {
+      "count": 3,
+      "sample": [
+        {
+          "id": 1,
+          "user_id": 1,
+          "action": "UPDATE",
+          "table_name": "users",
+          "record_id": 1,
+          "old_data": {
+            "id": 1,
+            "name": "Admin",
+            "role": "admin",
+            "email": "admin@localhost",
+            "user_id": null,
+            "password": "$2a$06$0zakRHlq5FFRnZC2ROU.NOfKCw3QeozeUqubMmTJwEGaIFreWZQJO",
+            "is_active": true,
+            "created_at": "2025-10-29T01:29:50.463224",
+            "created_by": null,
+            "updated_by": null
+          },
+          "new_data": {
+            "id": 1,
+            "name": "Admin",
+            "role": "admin",
+            "email": "admin@localhost",
+            "user_id": null,
+            "password": "$2a$06$qazmPV5Lj85XgRcyjSXeAudEYyU8JHrHjBZJLhgbU.gWQrdsjxztG",
+            "is_active": true,
+            "created_at": "2025-10-29T01:29:50.463224",
+            "created_by": null,
+            "updated_by": null
+          },
+          "ip_address": null,
+          "user_agent": null,
+          "session_id": null,
+          "timestamp": "2025-10-28T23:26:04.825Z",
+          "metadata": {}
+        },
+        {
+          "id": 2,
+          "user_id": 1,
+          "action": "UPDATE",
+          "table_name": "users",
+          "record_id": 1,
+          "old_data": {
+            "id": 1,
+            "name": "Admin",
+            "role": "admin",
+            "email": "admin@localhost",
+            "user_id": null,
+            "password": "$2a$06$qazmPV5Lj85XgRcyjSXeAudEYyU8JHrHjBZJLhgbU.gWQrdsjxztG",
+            "is_active": true,
+            "created_at": "2025-10-29T01:29:50.463224",
+            "created_by": null,
+            "updated_by": null
+          },
+          "new_data": {
+            "id": 1,
+            "name": "Admin",
+            "role": "admin",
+            "email": "admin@localhost",
+            "user_id": null,
+            "password": "$2a$06$/P2Aqns4KwV3LC6ywIWK4.D0Lr48Xjt6xmj0lumcJFBb8yaEZKvS.",
+            "is_active": true,
+            "created_at": "2025-10-29T01:29:50.463224",
+            "created_by": null,
+            "updated_by": null
+          },
+          "ip_address": null,
+          "user_agent": null,
+          "session_id": null,
+          "timestamp": "2025-10-29T00:19:36.120Z",
+          "metadata": {}
+        },
+        {
+          "id": 3,
+          "user_id": 1,
+          "action": "UPDATE",
+          "table_name": "users",
+          "record_id": 1,
+          "old_data": {
+            "id": 1,
+            "name": "Admin",
+            "role": "admin",
+            "email": "admin@localhost",
+            "user_id": null,
+            "password": "$2a$06$/P2Aqns4KwV3LC6ywIWK4.D0Lr48Xjt6xmj0lumcJFBb8yaEZKvS.",
+            "is_active": true,
+            "created_at": "2025-10-29T01:29:50.463224",
+            "created_by": null,
+            "updated_by": null
+          },
+          "new_data": {
+            "id": 1,
+            "name": "Admin",
+            "role": "admin",
+            "email": "admin@localhost",
+            "user_id": null,
+            "password": "$2a$06$lq9Fn/S4Eg9c5HeLanPZjO2xfMIYqQSaV27ZBQLtDojM02b/Vz3YG",
+            "is_active": true,
+            "created_at": "2025-10-29T01:29:50.463224",
+            "created_by": null,
+            "updated_by": null
+          },
+          "ip_address": null,
+          "user_agent": null,
+          "session_id": null,
+          "timestamp": "2025-10-29T00:23:32.307Z",
+          "metadata": {}
+        }
+      ]
+    },
+    "backups": {
+      "count": 0,
+      "sample": []
+    },
+    "buckets": {
+      "count": 0,
+      "sample": []
+    },
+    "comments": {
+      "count": 0,
+      "sample": []
+    },
+    "files": {
+      "count": 0,
+      "sample": []
+    },
+    "memberships": {
+      "count": 0,
+      "sample": []
+    },
+    "migrations_applied": {
+      "count": 6,
+      "sample": [
+        {
+          "id": 1,
+          "migration_name": "001-create-core-tables.sql",
+          "applied_at": "2025-10-28T15:40:39.904Z",
+          "checksum": "41995d08ca4a6fdfa276272a9de7856f1d1230ce697e66520aa46637b1c88384"
+        },
+        {
+          "id": 2,
+          "migration_name": "001-create-core-tables",
+          "applied_at": "2025-10-28T15:40:39.932Z",
+          "checksum": null
+        },
+        {
+          "id": 3,
+          "migration_name": "002-create-migrations-applied.sql",
+          "applied_at": "2025-10-28T15:40:39.943Z",
+          "checksum": "394cdd62600c4421cae205367e4c9ce11a30bed38398c23c6b1b38e83364ae2f"
+        },
+        {
+          "id": 4,
+          "migration_name": "002-test-table.sql",
+          "applied_at": "2025-10-28T15:40:39.997Z",
+          "checksum": "3e6c9784492aa395c6b0b12aeb3195c53a8b8e47c30ae9ac5771f113915e6b7f"
+        },
+        {
+          "id": 5,
+          "migration_name": "003-audit-logs-fk-on-delete-set-null",
+          "applied_at": "2025-10-28T15:40:40.030Z",
+          "checksum": null
+        }
+      ]
+    },
+    "notifications": {
+      "count": 0,
+      "sample": []
+    },
+    "organizations": {
+      "count": 0,
+      "sample": []
+    },
+    "projects": {
+      "count": 0,
+      "sample": []
+    },
+    "sessions": {
+      "count": 0,
+      "sample": []
+    },
+    "share_tokens": {
+      "count": 0,
+      "sample": []
+    },
+    "system_metrics_realtime": {
+      "count": 4,
+      "sample": [
+        {
+          "metric_name": "active_users",
+          "metric_value": "0",
+          "metric_unit": "count",
+          "timestamp": "2025-10-30T18:17:27.008Z"
+        },
+        {
+          "metric_name": "total_projects",
+          "metric_value": "0",
+          "metric_unit": "count",
+          "timestamp": "2025-10-30T18:17:27.008Z"
+        },
+        {
+          "metric_name": "active_tasks",
+          "metric_value": "0",
+          "metric_unit": "count",
+          "timestamp": "2025-10-30T18:17:27.008Z"
+        },
+        {
+          "metric_name": "api_calls_last_hour",
+          "metric_value": "0",
+          "metric_unit": "count",
+          "timestamp": "2025-10-30T18:17:27.008Z"
+        }
+      ]
+    },
+    "system_settings": {
+      "count": 10,
+      "sample": [
+        {
+          "id": 1,
+          "setting_key": "max_concurrent_connections",
+          "setting_value": "500",
+          "setting_type": "number",
+          "category": "database",
+          "description": "Maximum concurrent database connections",
+          "is_encrypted": false,
+          "requires_restart": false,
+          "last_modified_by": null,
+          "created_at": "2025-10-28T22:42:09.221Z",
+          "updated_at": "2025-10-28T22:42:09.221Z"
+        },
+        {
+          "id": 2,
+          "setting_key": "connection_pool_size",
+          "setting_value": "100",
+          "setting_type": "number",
+          "category": "database",
+          "description": "Database connection pool size",
+          "is_encrypted": false,
+          "requires_restart": false,
+          "last_modified_by": null,
+          "created_at": "2025-10-28T22:42:09.221Z",
+          "updated_at": "2025-10-28T22:42:09.221Z"
+        },
+        {
+          "id": 3,
+          "setting_key": "session_timeout_minutes",
+          "setting_value": "60",
+          "setting_type": "number",
+          "category": "security",
+          "description": "User session timeout in minutes",
+          "is_encrypted": false,
+          "requires_restart": false,
+          "last_modified_by": null,
+          "created_at": "2025-10-28T22:42:09.221Z",
+          "updated_at": "2025-10-28T22:42:09.221Z"
+        },
+        {
+          "id": 4,
+          "setting_key": "api_rate_limit_per_hour",
+          "setting_value": "1000",
+          "setting_type": "number",
+          "category": "api",
+          "description": "Default API rate limit per hour",
+          "is_encrypted": false,
+          "requires_restart": false,
+          "last_modified_by": null,
+          "created_at": "2025-10-28T22:42:09.221Z",
+          "updated_at": "2025-10-28T22:42:09.221Z"
+        },
+        {
+          "id": 5,
+          "setting_key": "backup_retention_days",
+          "setting_value": "30",
+          "setting_type": "number",
+          "category": "backup",
+          "description": "Days to retain backup files",
+          "is_encrypted": false,
+          "requires_restart": false,
+          "last_modified_by": null,
+          "created_at": "2025-10-28T22:42:09.221Z",
+          "updated_at": "2025-10-28T22:42:09.221Z"
+        }
+      ]
+    },
+    "tasks": {
+      "count": 0,
+      "sample": []
+    },
+    "test_table": {
+      "count": 0,
+      "sample": []
+    },
+    "users": {
+      "count": 1,
+      "sample": [
+        {
+          "id": 1,
+          "email": "admin@localhost",
+          "name": "Admin",
+          "password": "$2a$06$lq9Fn/S4Eg9c5HeLanPZjO2xfMIYqQSaV27ZBQLtDojM02b/Vz3YG",
+          "role": "admin",
+          "is_active": true,
+          "created_at": "2025-10-28T22:29:50.463Z",
+          "created_by": null,
+          "updated_by": null,
+          "user_id": null,
+          "username": null,
+          "password_hash": null
+        }
+      ]
+    }
+  }
+}
