@@ -31,23 +31,27 @@ The official 3ONDB – Quantum Database Engine powering the 3ON ecosystem.
 ### Setup
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/3ONCOIN/3ONDB.git
 cd 3ONDB
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Configure environment:
+
 ```bash
 cp .env.example .env
 # Edit .env with your configuration
 ```
 
 4. Start the server:
+
 ```bash
 # Development mode with auto-reload
 npm run dev
@@ -71,11 +75,13 @@ Edit `.env` file to configure:
 ## 📡 API Endpoints
 
 ### Query Operations
+
 - `POST /api/query` - Execute SQL queries
 - `GET /api/query/logs` - Get query execution logs
 - `GET /api/query/stats` - Get query statistics
 
 ### User Management
+
 - `POST /api/users/register` - Register new user
 - `POST /api/users/login` - Login user
 - `GET /api/users` - List users (authenticated)
@@ -84,15 +90,18 @@ Edit `.env` file to configure:
 - `DELETE /api/users/:id` - Delete user
 
 ### Backup Operations
+
 - `POST /api/backup` - Create backup
 - `GET /api/backup` - List backups
 - `POST /api/backup/:id/restore` - Restore backup
 
 ### Sync Operations
+
 - `GET /api/sync/status` - Get sync status
 - `POST /api/sync/force` - Force synchronization
 
 ### System Monitoring
+
 - `GET /api/system/status` - System status overview
 - `GET /api/system/health` - Health check reports
 - `GET /api/system/dashboard` - Dashboard data
@@ -101,6 +110,7 @@ Edit `.env` file to configure:
 - `GET /api/system/storage/metrics` - Storage metrics
 
 ### WebSocket
+
 - `ws://localhost:3000/ws/analytics` - Real-time analytics stream
 
 ## 📊 Real-Time Analytics
